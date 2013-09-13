@@ -1,0 +1,9 @@
+{
+  "name": "express-composite",
+  "description": "composite multi middlewares into one",
+  "repository": "villadora/composite",
+  "version": "0.0.1",
+  "keywords": ["middleware", "compose-pattern"],
+  "main": "index.js",
+  "license": "MIT"
+}

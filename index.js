@@ -2,30 +2,31 @@
 /**
  * Composite `middlewares` 
  *
- * @param {Array} middlewares
  * @return {Function}
  */
 
-module.exports = function(middlewares){
-    if(!(middlewares instanceof Array))
-        middlewares = arguments;
+module.exports = function(params){
+    var middlewares  = (params instanceof Array) ? params : arguments;
 
-    var args;
-    for(var i = 0, len = middlewares.length; i < len; ++i) {
-        if(!args) {
-            args = middlewares[i].length;
-        }else if(args !== middlewares[i].length) {
+    if(!middlewares.length) return function(req, res, next) {
+        next();
+    }; // empty middleware
+    
+    errorHandler = middlewares[0].length === 4;
+
+    for(var i = 1, len = middlewares.length; i < len; ++i) {
+        if ((errorHandler && middlewares[i].length !== 4)
+            || (!errorHandler && middlewares[i].length === 4)) {
             throw new Error("Don't mix middleware and error handling together");
         }
     }
 
-    if(args === 4) {
+    if(errorHandler) {
         return function(err, req, res, next){
             var index = 0;
             function newNext(err) {
                 if(index === middlewares.length)
                     return next(err);
-
                 try {
                     middlewares[index++](err, req, res, newNext);
                 }catch(e) {
@@ -38,7 +39,7 @@ module.exports = function(middlewares){
         return function(req, res, next) {
             var index = 0;
             function newNext(err) {
-                if(index === middlewares.length)
+                if(err || index === middlewares.length)
                     return next(err);
                 try {
                     middlewares[index++](req, res, newNext);
@@ -47,7 +48,7 @@ module.exports = function(middlewares){
                 }
             }
             
-            newNext(err);
+            newNext();
         };
     }
 };

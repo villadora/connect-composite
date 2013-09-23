@@ -17,7 +17,7 @@ The middleware could be normal one like:
 
 Or error handler:
 
-    function(req, res, next) {
+    function(err, req, res, next) {
         ...
     }
 

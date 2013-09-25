@@ -1,7 +1,10 @@
 {
     "name": "connect-composite",
     "description": "composite multi middlewares into one",
-    "repository": "villadora/connect-composite",
+    "repository":  {
+        "type":"git",
+        "url": "git@github.com:villadora/connect-composite.git"
+    },
     "version": "0.0.1",
     "keywords": ["connect", "express", "middleware", "compose-pattern"],
     "main": "index.js",
